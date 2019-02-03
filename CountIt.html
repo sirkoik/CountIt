@@ -4,6 +4,10 @@ button, div {
 	font-family: sans-serif;
 }
 
+button {
+	cursor: pointer;
+}
+
 textarea {width: 500px; height: 300px;}
 button {width:500px; height: 50px; font-size: 20px; margin-bottom: 5px;}
 
@@ -17,7 +21,7 @@ button {width:500px; height: 50px; font-size: 20px; margin-bottom: 5px;}
 	width: 500px;
 }
 .flex-container div {
-	width: 250px;
+	width: 167px;
 	text-align: center;
 }
 
@@ -30,10 +34,12 @@ button {width:500px; height: 50px; font-size: 20px; margin-bottom: 5px;}
 </textarea><br/>
 <button onclick="countIt()">Count</button>
 <div class="flex-container">
+	<div>Sentences</div>
 	<div>Words</div>
 	<div>Characters</div>
 </div>
 <div class="flex-container" id="output">
+	<div id="sentence-count" class="outputs"></div>
 	<div id="word-count" class="outputs"></div>
 	<div id="character-count" class="outputs"></div>
 </div>
@@ -50,12 +56,25 @@ function countIt() {
 	var wL = 0;
 	for (var i = 0; i < textArr.length; i++) if (textArr[i].length > 0) wL++;
 
+	var sentArr = text.split('. ');
+	var sL = 0;
+	for (var i = 0; i < sentArr.length; i++) if (sentArr[i].trim().length > 0) sL++;
+
+/*
+	var paraArr = text.split('.');
+	var pL = 0;
+	for (var i = 0; i < paraArr.length; i++) if (paraArr[i].trim().length > 0) pL++;
+
+	document.getElementById('paragraph-count').innerHTML = pL;*/
+
+	document.getElementById('sentence-count').innerHTML = sL;
 	document.getElementById('word-count').innerHTML = wL;
 	document.getElementById('character-count').innerHTML = text.length;
 
-	//var out = document.getElementById('output');
+
+	// Highlight outputs.
 	var out = document.getElementsByClassName('outputs');
-	//out.innerHTML = '<ul id="output"><li>Words: ' + textArr.length + '<br/>Characters: ' + text.length + '</li></ul>';
+
 	for (var i = 0; i < out.length; i++) {
 		out[i].style.backgroundColor = 'lime';
 		out[i].style.color = 'red';
