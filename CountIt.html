@@ -1,0 +1,76 @@
+<style>
+button, div {
+	font-size: 20px;
+	font-family: sans-serif;
+}
+
+textarea {width: 500px; height: 300px;}
+button {width:500px; height: 50px; font-size: 20px; margin-bottom: 5px;}
+
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	justify-content: center;
+
+	width: 500px;
+}
+.flex-container div {
+	width: 250px;
+	text-align: center;
+}
+
+#output * {
+	font-size: 50px;
+}
+</style>
+
+<textarea id="text">
+</textarea><br/>
+<button onclick="countIt()">Count</button>
+<div class="flex-container">
+	<div>Words</div>
+	<div>Characters</div>
+</div>
+<div class="flex-container" id="output">
+	<div id="word-count" class="outputs"></div>
+	<div id="character-count" class="outputs"></div>
+</div>
+
+<script>
+function countIt() {
+	var text = document.getElementById('text').value;
+	//alert(text);
+	var textArr = text.split(' ');
+	var wL = 0;
+	for (var i = 0; i < textArr.length; i++) if (textArr[i].length > 0) wL++;
+
+	document.getElementById('word-count').innerHTML = wL;
+	document.getElementById('character-count').innerHTML = text.length;
+
+	//var out = document.getElementById('output');
+	var out = document.getElementsByClassName('outputs');
+	//out.innerHTML = '<ul id="output"><li>Words: ' + textArr.length + '<br/>Characters: ' + text.length + '</li></ul>';
+	for (var i = 0; i < out.length; i++) {
+		out[i].style.backgroundColor = 'lime';
+		out[i].style.color = 'red';
+	}
+
+	setTimeout(function() {
+		for (var i = 0; i < out.length; i++) {
+			out[i].style.backgroundColor = '';
+			out[i].style.color = '';
+		}
+	}, 1000);
+}
+
+document.getElementById('text').addEventListener('keyup', function() {
+	countIt();
+});
+
+/*
+document.getElementById('text').addEventListener('paste', function() {
+	countIt();
+});*/
+</script>
