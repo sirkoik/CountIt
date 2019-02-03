@@ -39,9 +39,13 @@ button {width:500px; height: 50px; font-size: 20px; margin-bottom: 5px;}
 </div>
 
 <script>
+var textVal = '';
+
 function countIt() {
 	var text = document.getElementById('text').value;
-	//alert(text);
+
+	if (text === textVal) return false;
+
 	var textArr = text.split(' ');
 	var wL = 0;
 	for (var i = 0; i < textArr.length; i++) if (textArr[i].length > 0) wL++;
@@ -56,6 +60,8 @@ function countIt() {
 		out[i].style.backgroundColor = 'lime';
 		out[i].style.color = 'red';
 	}
+
+	textVal = text;
 
 	setTimeout(function() {
 		for (var i = 0; i < out.length; i++) {
