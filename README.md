@@ -8,7 +8,7 @@ Enter characters in the text box or paste them in. CountIt will display the numb
 
 ## Limitations
 
-CountIt's sentence counter doesn't do very well with abbreviations or single letters with periods. #1 Examples of what will be miscounted:
+CountIt's sentence counter doesn't do very well with abbreviations or single letters with periods. Examples of what will be miscounted:
 
 > J. B. is going to the park today.
 
