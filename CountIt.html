@@ -1,101 +1,137 @@
-<style>
-button, div {
-	font-size: 20px;
-	font-family: sans-serif;
-}
+<html>
+    <head>
+        <title>CountIt</title>
+        
+        <style>
+        button, div {
+            font-size: 20px;
+            font-family: sans-serif;
+        }
 
-button {
-	cursor: pointer;
-}
+        button {
+            width:500px;
+            height: 50px;
+            font-size: 20px;
+            margin-bottom: 5px;
+            
+            cursor: pointer;
+        }
 
-textarea {width: 500px; height: 300px;}
-button {width:500px; height: 50px; font-size: 20px; margin-bottom: 5px;}
+        textarea {width: 500px; height: 300px;}
 
-.flex-container {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
 
-	justify-content: center;
+            justify-content: center;
 
-	width: 500px;
-}
-.flex-container div {
-	width: 167px;
-	text-align: center;
-}
+            width: 500px;
+        }
+        .flex-container div {
+            width: 167px;
+            text-align: center;
+        }
 
-#output * {
-	font-size: 50px;
-}
-</style>
+        #output * {
+            font-size: 50px;
+            }
+        </style>
+    </head>
 
-<textarea id="text">
-</textarea><br/>
-<button onclick="countIt()">Count</button>
-<div class="flex-container">
-	<div>Sentences</div>
-	<div>Words</div>
-	<div>Characters</div>
-</div>
-<div class="flex-container" id="output">
-	<div id="sentence-count" class="outputs"></div>
-	<div id="word-count" class="outputs"></div>
-	<div id="character-count" class="outputs"></div>
-</div>
+    <body>
+        <textarea id="text"></textarea><br/>
+        
+        <button onclick="countIt()">Count</button>
+        <div class="flex-container">
+            <div>Sentences</div>
+            <div>Words</div>
+            <div>Characters</div>
+        </div>
+        <div class="flex-container" id="output">
+            <div id="sentence-count" class="outputs">0</div>
+            <div id="word-count" class="outputs">0</div>
+            <div id="character-count" class="outputs">0</div>
+        </div>
 
-<script>
-var textVal = '';
+        <script>
+            // previous value storage.
+            var prev = { val: '', s: 0, w: 0, c: 0 };
+            
+            function countIt() {
+                var text = document.getElementById('text').value;
 
-function countIt() {
-	var text = document.getElementById('text').value;
+                if (text === prev.val) return false;
 
-	if (text === textVal) return false;
+                hiLite('sentence-count', false);
+                hiLite('word-count', false);
+                hiLite('character-count', false);
+                
 
-	var textArr = text.split(' ');
-	var wL = 0;
-	for (var i = 0; i < textArr.length; i++) if (textArr[i].length > 0) wL++;
+                var sentArr = text.split('. ');
+                var sL = 0;
+                for (var i = 0; i < sentArr.length; i++) if (sentArr[i].trim().length > 0) sL++;                
+                
+                var wordArr = text.split(' ');
+                var wL = 0;
+                for (var i = 0; i < wordArr.length; i++) if (wordArr[i].length > 0) wL++;
 
-	var sentArr = text.split('. ');
-	var sL = 0;
-	for (var i = 0; i < sentArr.length; i++) if (sentArr[i].trim().length > 0) sL++;
+                var cL = text.length;
 
-/*
-	var paraArr = text.split('.');
-	var pL = 0;
-	for (var i = 0; i < paraArr.length; i++) if (paraArr[i].trim().length > 0) pL++;
+                /*
+                TODO paragraph counter
 
-	document.getElementById('paragraph-count').innerHTML = pL;*/
+                var paraArr = text.split('.');
+                var pL = 0;
+                for (var i = 0; i < paraArr.length; i++) if (paraArr[i].trim().length > 0) pL++;
 
-	document.getElementById('sentence-count').innerHTML = sL;
-	document.getElementById('word-count').innerHTML = wL;
-	document.getElementById('character-count').innerHTML = text.length;
+                document.getElementById('paragraph-count').innerHTML = pL;
+                */
 
+                // populate values.
+                if (sL != prev.s) { document.getElementById('sentence-count') .innerHTML = sL; hiLite('sentence-count', true);  }
+                if (wL != prev.w) { document.getElementById('word-count')     .innerHTML = wL; hiLite('word-count', true);      }
+                if (cL != prev.c) { document.getElementById('character-count').innerHTML = cL; hiLite('character-count', true); }
 
-	// Highlight outputs.
-	var out = document.getElementsByClassName('outputs');
+                // populate title
+                document.title = "CountIt: s=" + sL + ', w=' + wL + ', c=' + cL;
 
-	for (var i = 0; i < out.length; i++) {
-		out[i].style.backgroundColor = 'lime';
-		out[i].style.color = 'red';
-	}
+                // populate values into next previous values comparison.
+                prev.val = text;
+                prev.s = sL;
+                prev.w = wL;
+                prev.c = cL;
 
-	textVal = text;
+                // unhighlight after timer
+                setTimeout(function() {
+                    hiLite('sentence-count', false);
+                    hiLite('word-count', false);
+                    hiLite('character-count', false);
 
-	setTimeout(function() {
-		for (var i = 0; i < out.length; i++) {
-			out[i].style.backgroundColor = '';
-			out[i].style.color = '';
-		}
-	}, 1000);
-}
+                }, 1000);
+            }
 
-document.getElementById('text').addEventListener('keyup', function() {
-	countIt();
-});
+            // highlight numbers.
+            function hiLite(elId, switchOn) {
+                var el = document.getElementById(elId);
 
-/*
-document.getElementById('text').addEventListener('paste', function() {
-	countIt();
-});*/
-</script>
+                el.style.color = switchOn? 'red' : '';
+                el.style.backgroundColor = switchOn? 'lime' : '';
+            }
+            
+            // countIt is called on keyup
+            document.getElementById('text').addEventListener('keyup', function() {
+                countIt();
+            });
+
+            // paste event fires before textarea's value is changed.
+            // so it needs a minimal timeout set in order to be able to read text contents.
+            // https://stackoverflow.com/a/10972973/5511776
+            document.getElementById('text').addEventListener('paste', function() {
+                setTimeout(function() {
+                    countIt();
+                }, 0);
+            });
+        </script>
+    </body>
+</html>
