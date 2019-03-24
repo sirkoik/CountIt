@@ -3,19 +3,27 @@
         <title>CountIt</title>
         
         <style>
-        button, div {
+        button, div, input, label {
             font-size: 20px;
             font-family: sans-serif;
         }
 
         button {
-            width:500px;
+
             height: 50px;
             font-size: 20px;
             margin-bottom: 5px;
             
             cursor: pointer;
         }
+            
+            #count {
+                width: 225px;
+            }
+            
+            #copy {
+                width: 150px;
+            }
 
         textarea {width: 500px; height: 300px;}
 
@@ -42,7 +50,9 @@
     <body>
         <textarea id="text"></textarea><br/>
         
-        <button onclick="countIt()">Count</button>
+        <button onclick="countIt()" id="count">Count</button><button id="copy">Copy</button>
+        <input type="checkbox" name="auto-count" id="auto-count" checked><label for="auto-count">Auto count</label>
+        
         <div class="flex-container">
             <div>Sentences</div>
             <div>Words</div>
@@ -119,9 +129,9 @@
                 el.style.backgroundColor = switchOn? 'lime' : '';
             }
             
-            // countIt is called on keyup
+            // countIt is called on keyup if #auto-count is checked
             document.getElementById('text').addEventListener('keyup', function() {
-                countIt();
+                if (document.querySelector('#auto-count').checked) countIt();
             });
 
             // paste event fires before textarea's value is changed.
@@ -132,6 +142,12 @@
                     countIt();
                 }, 0);
             });
+            
+            // copy text from #text
+            document.querySelector('#copy').onclick = function() {
+                document.querySelector('#text').select();
+                document.execCommand('copy');
+            }
         </script>
     </body>
 </html>

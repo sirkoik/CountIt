@@ -27,3 +27,8 @@ Unfortunately, I don't see how to automatically check for these things without a
 * HTML5 drag/dropping of files into the textbox
 
 Any suggestions regarding design or implementation are welcome.
+
+# Versions
+
+* 0.1 - Basic counter
+    * 0.1.1 - Added copy button and auto count toggle.
