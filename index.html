@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>CountIt v0.1.1</title>
+        <title>CountIt v0.1.2</title>
         
         <style>
         button, div, input, label {
@@ -25,7 +25,11 @@
                 width: 150px;
             }
 
-        textarea {width: 500px; height: 300px;}
+        #text {
+            font-size: 150%;
+            width: 500px; 
+            height: 300px;
+        }
 
         .flex-container {
             display: flex;
@@ -68,15 +72,19 @@
             // previous value storage.
             var prev = { val: '', s: 0, w: 0, c: 0 };
             
+            // highlight timeout. Setting to this variable makes sure that only one highlight timeout is set at one time.
+            var hiliteTs;
+            
             function countIt() {
+                if (!document.querySelector('#auto-count').checked) return false;
+
                 var text = document.getElementById('text').value;
 
-                if (text === prev.val) return false;
+	           if (text === prev.val) return false;
 
                 hiLite('sentence-count', false);
                 hiLite('word-count', false);
                 hiLite('character-count', false);
-                
 
                 var sentArr = text.split('. ');
                 var sL = 0;
@@ -113,7 +121,7 @@
                 prev.c = cL;
 
                 // unhighlight after timer
-                setTimeout(function() {
+                hiliteTs = setTimeout(function() {
                     hiLite('sentence-count', false);
                     hiLite('word-count', false);
                     hiLite('character-count', false);
@@ -129,25 +137,19 @@
                 el.style.backgroundColor = switchOn? 'lime' : '';
             }
             
-            // countIt is called on keyup if #auto-count is checked
-            document.getElementById('text').addEventListener('keyup', function() {
-                if (document.querySelector('#auto-count').checked) countIt();
-            });
-
-            // paste event fires before textarea's value is changed.
-            // so it needs a minimal timeout set in order to be able to read text contents.
-            // https://stackoverflow.com/a/10972973/5511776
-            document.getElementById('text').addEventListener('paste', function() {
-                setTimeout(function() {
-                    countIt();
-                }, 0);
-            });
+            // countIt is called on input (change of #text value) if #auto-count is checked
+            document.querySelector('#text').oninput = function(e) {
+                countIt();
+            };
             
             // copy text from #text
             document.querySelector('#copy').onclick = function() {
                 document.querySelector('#text').select();
                 document.execCommand('copy');
             }
+            
+            // auto-focus the textbox on load.
+            document.querySelector('#text').focus();
         </script>
     </body>
 </html>
