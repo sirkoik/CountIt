@@ -32,3 +32,4 @@ Any suggestions regarding design or implementation are welcome.
 
 * 0.1 - Basic counter
     * 0.1.1 - Added copy button and auto count toggle.
+    * 0.1.2 - Fixed counter not counting on hold down; made highlighting more efficient.
