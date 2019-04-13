@@ -6,6 +6,8 @@ CountIt quickly displays the number of sentences, words, and characters in the t
 
 Enter characters in the text box or paste them in. CountIt will display the number of sentences, words, and characters below.
 
+To see the count of a selection, simply select the text in the text box.
+
 ## Limitations
 
 CountIt's sentence counter doesn't do very well with abbreviations or single letters with periods. Examples of what will be miscounted:
@@ -29,6 +31,8 @@ Unfortunately, I don't see how to automatically check for these things without a
 Any suggestions regarding design or implementation are welcome.
 
 # Versions
+
+* 0.2 - Can count selected sub-text as well.
 
 * 0.1 - Basic counter
     * 0.1.1 - Added copy button and auto count toggle.
