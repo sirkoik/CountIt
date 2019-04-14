@@ -168,6 +168,11 @@
                 countIt(true);
             }
             
+            // selection handler for iOS
+            document.querySelector('#text').onselectionchange = function() {
+                countIt(true);
+            }
+            
             document.querySelector('#text').onkeyup = function(e) {
                 if (autoCount) countIt(true);
             }
