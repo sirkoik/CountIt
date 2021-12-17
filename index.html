@@ -115,19 +115,22 @@
       function counts(text) {
         if (text === prev.val) return prev;
 
-        // sC: sentence count
+        // sentence count
         // Doesn't count sentences that are improperly
         // spaced (i.e. "This is a sentence.This is another sentence.")
         const sentences = text.trim().split(/\.\s\n?/);
 
-        // wC: word count
+        // word count (with spaces)
         const words = text.trim().split(/[\s\n]+/);
+
+        // character count (matches MS Word char count)
+        const characters = text.replace(/\n/g, '');
 
         return {
           val: text,
           s: sentences.length,
           w: words.length,
-          c: text.length,
+          c: characters.length,
         };
       }
 
@@ -243,6 +246,104 @@
           $indicator.style.display = 'none';
         }
       }, 500);
+    </script>
+
+    <script>
+      function shallowAssert(desc, a, b) {
+        for (prop in a) {
+          if (a[prop] !== b[prop]) {
+            console.log(desc, false, a, b);
+            return false;
+          }
+        }
+
+        for (prop in b) {
+          if (b[prop] !== a[prop]) {
+            console.log(desc, false, a, b);
+            return false;
+          }
+        }
+
+        console.log(desc, true);
+        return true;
+      }
+
+      shallowAssert('should be default when supplying empty', counts(''), {
+        val: '',
+        s: 0,
+        w: 0,
+        c: 0,
+      });
+      shallowAssert(
+        'should return 1 word when supplying hello',
+        counts('hello'),
+        {
+          val: 'hello',
+          s: 1,
+          w: 1,
+          c: 5,
+        }
+      );
+      shallowAssert('should return 1, 4, 14', counts('How do you do?'), {
+        val: 'How do you do?',
+        s: 1,
+        w: 4,
+        c: 14,
+      });
+      shallowAssert(
+        'should return 2, 9, 38',
+        counts('I am a sentence. I am also a sentence.'),
+        {
+          val: 'I am a sentence. I am also a sentence.',
+          s: 2,
+          w: 9,
+          c: 38,
+        }
+      );
+
+      const bacon1 = `Bacon ipsum dolor amet brisket chuck bacon drumstick strip steak landjaeger. Ham hock t-bone swine corned beef alcatra meatloaf. Tail bresaola landjaeger doner. Shank pork belly pig hamburger meatloaf rump short loin.
+
+Turducken pancetta beef ribs pork loin short ribs turkey shoulder short loin, ham chuck ribeye buffalo. Flank biltong drumstick ball tip. Shoulder turducken tongue kevin rump boudin meatball pancetta short ribs tail pastrami. Ground round pork belly pastrami tri-tip kevin doner. Landjaeger ground round swine bacon pork belly kielbasa. Pig meatloaf beef ribs sirloin, pastrami alcatra spare ribs tail chicken. Picanha meatball ham brisket, filet mignon biltong swine meatloaf.
+
+Turkey porchetta leberkas chislic cow pork chop bacon tri-tip tail boudin hamburger salami swine. Ham boudin bresaola chuck. Shank shankle ham hock, picanha frankfurter porchetta meatloaf meatball flank andouille. Leberkas flank capicola shoulder pork chop. Ribeye shankle swine tenderloin ball tip kielbasa pork picanha jerky tri-tip spare ribs pancetta cow.
+
+Ham hock doner short ribs bresaola. Pastrami sirloin pork loin turducken, beef picanha sausage tongue pancetta burgdoggen. Bacon sirloin corned beef t-bone kevin hamburger spare ribs rump jowl. Shank strip steak flank chicken.
+
+Corned beef porchetta pork chop, cupim filet mignon tongue chuck pancetta capicola beef tri-tip. Ground round sirloin fatback venison, rump cupim turkey chislic pastrami pork belly bresaola. Filet mignon tri-tip sausage beef ribs picanha tenderloin. Pig sausage spare ribs, short ribs fatback frankfurter salami. Chuck ham hock kevin alcatra flank. Pork chop fatback ribeye biltong buffalo capicola. Biltong alcatra filet mignon ribeye shankle strip steak.`;
+
+      shallowAssert('should return 27, 249, 1743', counts(bacon1), {
+        val: bacon1,
+        s: 27,
+        w: 249,
+        c: 1735,
+      });
+
+      const bacon2 = `Bacon ipsum dolor amet qui jowl elit, sed filet mignon sint ball tip andouille boudin deserunt duis officia bacon turkey. Frankfurter beef landjaeger, brisket ex culpa shank picanha. Spare ribs ut brisket t-bone boudin. Est commodo officia flank ex.
+
+Short loin et proident ex chuck ball tip ground round veniam. Veniam et meatball labore commodo. Ullamco porchetta exercitation pork belly turducken, nisi reprehenderit veniam sunt. Reprehenderit enim doner, exercitation pork aliqua chuck incididunt. Velit short ribs ex nulla capicola ball tip enim. Biltong leberkas laborum, officia jowl sint chicken corned beef meatball. Aliqua short ribs in fugiat, in nulla elit meatball ball tip velit labore.
+
+Do ut kielbasa pastrami anim pariatur. Buffalo jerky nisi venison. Landjaeger jerky pork chop cillum. Spare ribs mollit swine, jowl shankle flank dolore bresaola prosciutto boudin ground round. In reprehenderit beef ribs pork belly nostrud qui turkey dolore pastrami voluptate dolor rump bresaola. Voluptate in alcatra reprehenderit kielbasa pariatur chicken sausage tri-tip pig adipisicing ea sed turkey. Strip steak leberkas bacon burgdoggen, jowl aliquip duis velit.
+
+Pariatur deserunt short ribs, nulla et tongue filet mignon meatball id shoulder cupim corned beef aliqua capicola ut. Ad shankle consectetur, strip steak sirloin beef irure ea minim dolore jerky chislic et ipsum. Veniam voluptate qui, shankle dolor shoulder adipisicing tail pork strip steak pork loin beef ribs jowl. Bresaola beef ribs picanha venison duis shank burgdoggen aliquip ribeye cupidatat. Tempor pork belly aliqua tongue landjaeger dolore elit turducken shank frankfurter qui nulla nostrud esse filet mignon. Prosciutto ball tip ground round pig meatloaf aliquip frankfurter nisi non ipsum meatball ut venison. Jerky aliquip eiusmod swine short loin deserunt flank.
+
+Short ribs kielbasa alcatra pork loin esse eu sed spare ribs burgdoggen. Minim tongue frankfurter sint ullamco jerky, voluptate chuck non shank ut drumstick quis. Laboris magna brisket officia non irure shank tongue filet mignon, elit id tenderloin dolor cupim. Aliquip short loin chislic, andouille nisi consectetur beef ribs pastrami ipsum est laborum.
+
+In officia mollit, beef id ground round strip steak quis. Beef filet mignon venison velit est ball tip, irure landjaeger strip steak culpa tempor porchetta. Frankfurter drumstick corned beef anim duis magna in aute exercitation pork belly filet mignon chicken leberkas. Strip steak prosciutto chicken chuck minim, ut consectetur irure andouille sausage. Cupim sunt andouille tempor ball tip incididunt beef ribs ex labore magna minim. Sint enim culpa ham hock ball tip dolore non, exercitation magna incididunt bresaola ipsum ut.
+
+Culpa salami jowl shoulder. Irure proident enim, flank sed eiusmod shank ground round bresaola culpa non t-bone. Sunt ad pork ut deserunt exercitation. Ad reprehenderit eu esse, aliquip anim lorem est meatball kevin sirloin sunt. Ribeye jowl occaecat porchetta et rump pork loin ut turkey voluptate ea. Cillum flank anim enim, proident mollit tenderloin meatloaf beef ribs ullamco exercitation.
+
+Lorem buffalo ball tip magna spare ribs kielbasa esse short ribs, t-bone pancetta corned beef cillum id beef minim. Ut pork chop pork belly strip steak mollit anim picanha. Ea shank pancetta pastrami alcatra shankle. Porchetta ground round mollit eu et tongue non spare ribs. Beef ribs dolore id non laborum hamburger cow ea buffalo. Irure dolor nulla, cillum porchetta dolore ullamco filet mignon dolore consectetur sed fatback reprehenderit ex ham. Tenderloin biltong in qui nulla ex spare ribs.
+
+Labore bresaola magna flank aute strip steak do. Salami chislic ea jerky sint in quis fatback pig porchetta aute exercitation shank chicken. Esse porchetta eu tenderloin corned beef commodo. Consectetur pig tenderloin, kielbasa anim elit ea bresaola. Nisi non drumstick pig, filet mignon fatback duis strip steak cow lorem biltong meatloaf capicola pastrami. Biltong ut shoulder, brisket sint incididunt lorem eu in picanha pork chop anim eiusmod kevin esse. Qui chislic biltong magna nisi anim laboris in velit drumstick tempor.
+
+Boudin filet mignon consectetur, qui velit excepteur tail pork loin. Short loin tail venison pork chop veniam tenderloin esse chuck. Proident pork belly capicola landjaeger pig short loin ut ground round in veniam. Chislic minim dolore tail, pastrami incididunt meatloaf. Beef consectetur tongue andouille, meatloaf meatball shankle biltong ut. Sirloin non laborum, turkey qui burgdoggen landjaeger ipsum. Laboris consectetur chicken short ribs qui boudin cupidatat meatloaf.`;
+
+      shallowAssert('should return 62, 688, 4622', counts(bacon2), {
+        val: bacon2,
+        s: 62,
+        w: 688,
+        c: 4622,
+      });
     </script>
   </body>
 </html>
