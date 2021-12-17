@@ -3,58 +3,18 @@
     <title>CountIt</title>
 
     <style>
-      button,
-      div,
-      input,
-      label {
-        font-size: 20px;
+      body {
+        font-size: 2em;
         font-family: sans-serif;
       }
 
-      button {
-        height: 50px;
-        font-size: 20px;
-        margin-bottom: 5px;
-
-        cursor: pointer;
-      }
-
-      #count {
-        width: 150px;
-      }
-
-      #copy {
-        width: 150px;
-      }
-
-      #notes {
-        width: 77px;
-      }
-
-      #text {
-        font-size: 150%;
-        width: 500px;
-        height: 300px;
-      }
-
-      .flex-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-
-        justify-content: center;
-
-        width: 500px;
-      }
-
-      .flex-container div {
-        width: 167px;
+      h1.title {
         text-align: center;
-        transition: background-color 0.5s;
       }
 
-      #output * {
-        font-size: 50px;
+      h2.subtitle {
+        text-align: center;
+        font-size: 80%;
       }
 
       @keyframes selectAnim {
@@ -69,6 +29,22 @@
         }
       }
 
+      .container {
+        width: 100%;
+        text-align: center;
+      }
+
+      input,
+      button,
+      textarea {
+        font-size: 2rem;
+      }
+
+      #text {
+        width: 80%;
+        box-shadow: 0.5rem 0.5rem 1rem #ccc;
+      }
+
       #select-indicator {
         animation: selectAnim 2s infinite;
         width: 500px;
@@ -80,29 +56,57 @@
   </head>
 
   <body>
-    <textarea id="text" autofocus></textarea><br />
+    <h1 class="title">CountIt</h1>
+    <h2 class="subtitle">
+      Live sentence, word, paragraph, and character counter
+    </h2>
+    <p>
+      This utility is handy for quick work counts. Enter text or paste it into
+      the box below. The counters below the box will automatically update as you
+      type.
+    </p>
 
-    <button onclick="countIt(false)" id="count">Count</button
-    ><button id="copy">Copy</button>
-    <input type="checkbox" name="auto-count" id="auto-count" checked /><label
-      for="auto-count"
-      >Auto count</label
-    >
-    <button id="notes">Notes</button>
+    <div class="container">
+      <textarea id="text" rows="15" autofocus></textarea>
+    </div>
+    <div>
+      <button onclick="countIt(false)" id="count">Count</button
+      ><button id="copy">Copy</button>
+      <input type="checkbox" name="auto-count" id="auto-count" checked /><label
+        for="auto-count"
+        >Auto count</label
+      >
+      <button id="notes">Notes</button>
 
-    <div class="flex-container">
-      <div>Sentences</div>
-      <div>Words</div>
-      <div>Characters</div>
-      <div>Paragraphs</div>
+      <div class="flex-container">
+        <div>Sentences</div>
+        <div>Words</div>
+        <div>Characters</div>
+        <div>Paragraphs</div>
+      </div>
+      <div class="flex-container" id="output">
+        <div id="sentence-count" class="outputs">0</div>
+        <div id="word-count" class="outputs">0</div>
+        <div id="character-count" class="outputs">0</div>
+        <div id="paragraph-count" class="outputs">0</div>
+      </div>
+      <div id="select-indicator">&mdash; of selection &mdash;</div>
     </div>
-    <div class="flex-container" id="output">
-      <div id="sentence-count" class="outputs">0</div>
-      <div id="word-count" class="outputs">0</div>
-      <div id="character-count" class="outputs">0</div>
-      <div id="paragraph-count" class="outputs">0</div>
-    </div>
-    <div id="select-indicator">&mdash; of selection &mdash;</div>
+
+    <h2 class="subtitle">Notes and Limitations</h2>
+    <ol>
+      <li>
+        The counter won't be accurate if a sentence contains acronyms or names
+        with periods. For instance, "J. D. Johnson" will count as three
+        sentences. "J.D. Johnson" will count as two.
+      </li>
+
+      <li>
+        A paragraph is a block of text. Paragraphs are separated by line breaks.
+      </li>
+
+      <li>The character count includes spaces.</li>
+    </ol>
 
     <script>
       const version = 'v0.3';
@@ -282,18 +286,6 @@
           $indicator.style.display = 'none';
         }
       }, 500);
-
-      function notes() {
-        notes = `CountIt by @sirkoik -- Important notes
-
-1. The sentence counter won't be accurate if a sentence contains acronyms or names with periods. For instance, "J. D. Johnson" will count as three sentences. "J.D. Johnson" will count as two.
-
-2. A paragraph is a block of text. Paragraphs are separated by line breaks.
-
-3. The character counter includes spaces.`;
-
-        alert(notes);
-      }
     </script>
   </body>
 </html>
