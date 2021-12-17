@@ -24,16 +24,18 @@ Unfortunately, I don't see how to automatically check for these things without a
 
 ## Things I want to do
 
-* Implement a paragraph counter 
-* Make the flexbox more dynamic / size with the text box
-* HTML5 drag/dropping of files into the textbox
+- Implement a paragraph counter
+- Make the flexbox more dynamic / size with the text box
+- HTML5 drag/dropping of files into the textbox
 
 Any suggestions regarding design or implementation are welcome.
 
 # Versions
 
-* 0.2 - Can count selected sub-text as well.
+- 0.3 - Refactored code to make fewer calls and use ES6.
 
-* 0.1 - Basic counter
-    * 0.1.1 - Added copy button and auto count toggle.
-    * 0.1.2 - Fixed counter not counting on hold down; made highlighting more efficient.
+- 0.2 - Can count selected sub-text as well.
+
+- 0.1 - Basic counter
+  - 0.1.1 - Added copy button and auto count toggle.
+  - 0.1.2 - Fixed counter not counting on hold down; made highlighting more efficient.
