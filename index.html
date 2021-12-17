@@ -115,19 +115,22 @@
       function counts(text) {
         if (text === prev.val) return prev;
 
-        // sC: sentence count
+        // sentences: sentence count
         // Doesn't count sentences that are improperly
         // spaced (i.e. "This is a sentence.This is another sentence.")
         const sentences = text.trim().split(/\.\s\n?/);
 
-        // wC: word count
+        // words: word count
         const words = text.trim().split(/[\s\n]+/);
+
+        // characters: character count (matches MS Word char count)
+        const characters = text.replace(/\n/g, '');
 
         return {
           val: text,
           s: sentences.length,
           w: words.length,
-          c: text.length,
+          c: characters.length,
         };
       }
 
