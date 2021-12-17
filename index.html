@@ -128,8 +128,11 @@
         }
 
         // words: word count
-        // const words = trimmed.split(/[\s\n]+/);
-        const words = trimmed.match(/\w+/g) ?? [];
+        const words = trimmed.split(/[\s\n]+/);
+        if (words[0] === '') {
+          words.pop();
+        }
+        //const words = trimmed.match(/\w+/g) ?? [];
 
         // characters: character count (matches MS Word char count with spaces)
         const characters = text.replace(/\n/g, '');
