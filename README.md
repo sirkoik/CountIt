@@ -24,13 +24,14 @@ Unfortunately, I don't see how to automatically check for these things without a
 
 ## Things I want to do
 
-- Implement a paragraph counter
 - Make the flexbox more dynamic / size with the text box
 - HTML5 drag/dropping of files into the textbox
 
 Any suggestions regarding design or implementation are welcome.
 
 # Versions
+
+- 0.4 - Added a paragraph counter.
 
 - 0.3 - Refactored code to make fewer calls and use ES6.
 
