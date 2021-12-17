@@ -1,10 +1,10 @@
-# CountIt word counting script
+# CountIt live sentence, word, character, and paragraph counting script
 
 CountIt quickly displays the number of sentences, words, and characters in the text box. CountIt is a fully self-contained html page; simply run CountIt.html and it works.
 
 ## Usage
 
-Enter characters in the text box or paste them in. CountIt will display the number of sentences, words, and characters below.
+Enter characters in the text box or paste them in. CountIt will display the number of sentences, words, characters, and paragraphs below.
 
 To see the count of a selection, simply select the text in the text box.
 
@@ -35,7 +35,7 @@ Any suggestions regarding design or implementation are welcome.
 
 - 0.3 - Refactored code to make fewer calls and use ES6.
 
-- 0.2 - Can count selected sub-text as well.
+- 0.2 - Can count selected sub-text as well. (Not in iOS. [#7](https://github.com/sirkoik/CountIt/issues/7))
 
 - 0.1 - Basic counter
   - 0.1.1 - Added copy button and auto count toggle.
