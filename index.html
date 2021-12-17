@@ -123,23 +123,32 @@
         // Doesn't count sentences that are improperly
         // spaced (i.e. "This is a sentence.This is another sentence.")
         const sentences = trimmed.split(/\.\s\n?/);
+        if (sentences[0] === '') {
+          sentences.pop();
+        }
 
         // words: word count
-        const words = trimmed.split(/[\s\n]+/);
+        // const words = trimmed.split(/[\s\n]+/);
+        const words = trimmed.match(/\w+/g) ?? [];
 
         // characters: character count (matches MS Word char count with spaces)
         const characters = text.replace(/\n/g, '');
 
         // paragraphs: number of paragraphs (blocks of text).
         const paragraphs = trimmed.split(/\n+/);
+        if (paragraphs[0] === '') {
+          paragraphs.pop();
+        }
 
-        return {
+        const next = {
           val: text,
           s: sentences.length,
           w: words.length,
           c: characters.length,
           p: paragraphs.length,
         };
+
+        return next;
       }
 
       // countIt: runner function.
