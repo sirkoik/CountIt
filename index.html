@@ -110,6 +110,30 @@
       };
       const $indicator = document.getElementById('select-indicator');
 
+      // counts: Return sentence, word, and character counts.
+      // @text input text
+      function counts(text) {
+        if (text === prev.val) return prev;
+
+        // sC: sentence count
+        // Doesn't count sentences that are improperly
+        // spaced (i.e. "This is a sentence.This is another sentence.")
+        const sentences = text.trim().split(/\.\s\n?/);
+
+        // wC: word count
+        const words = text.trim().split(/[\s\n]+/);
+
+        return {
+          val: text,
+          s: sentences.length,
+          w: words.length,
+          c: text.length,
+        };
+      }
+
+      // countIt: runner function.
+      // calls counts() and updates DOM.
+      // @isSelection: is the text part of a selection or not.
       function countIt(isSelection) {
         const sel = window.getSelection().toString();
         $indicator.style.display = sel == '' ? 'none' : 'block';
@@ -123,49 +147,38 @@
           return false;
         }
 
-        // sC: sentence count
-        // Doesn't count sentences that are improperly
-        // spaced (i.e. "This is a sentence.This is another sentence.")
-        const sentArr = text.trim().split(/\.\s\n?/);
-        const sC = sentArr.length;
-
-        // wC: word count
-        const wordArr = text.trim().split(/[\s\n]+/);
-        const wC = wordArr.length;
-
-        // cC: character count (including spaces and breaks)
-        const cC = text.length;
+        const cts = counts(text);
 
         // populate values.
-        if (sC === prev.s) {
+        if (cts.s === prev.s) {
           hiLite('s', false);
         } else {
-          $elements.s.textContent = sC;
+          $elements.s.textContent = cts.s;
           hiLite('s', true);
         }
 
-        if (wC === prev.w) {
+        if (cts.w === prev.w) {
           hiLite('w', false);
         } else {
-          $elements.w.textContent = wC;
+          $elements.w.textContent = cts.w;
           hiLite('w', true);
         }
 
-        if (cC === prev.c) {
+        if (cts.c === prev.c) {
           hiLite('c', false);
         } else {
-          $elements.c.textContent = cC;
+          $elements.c.textContent = cts.c;
           hiLite('c', true);
         }
 
         // populate title.
-        document.title = `CountIt: s=${sC}, w=${wC}, c=${cC}`;
+        document.title = `CountIt: s=${cts.s}, w=${cts.w}, c=${cts.c}`;
 
         // populate values into next previous values comparison.
         prev.val = text;
-        prev.s = sC;
-        prev.w = wC;
-        prev.c = cC;
+        prev.s = cts.s;
+        prev.w = cts.w;
+        prev.c = cts.c;
 
         // unhighlight after timer.
         hiliteTs = setTimeout(() => {
