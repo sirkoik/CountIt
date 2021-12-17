@@ -4,6 +4,7 @@
 
     <style>
       body {
+        margin: 2rem;
         font-size: 2em;
         font-family: sans-serif;
       }
@@ -14,7 +15,7 @@
 
       h2.subtitle {
         text-align: center;
-        font-size: 80%;
+        /* font-size: 80%; */
       }
 
       @keyframes selectAnim {
@@ -34,15 +35,54 @@
         text-align: center;
       }
 
-      input,
-      button,
       textarea {
         font-size: 2rem;
+      }
+
+      input, button {
+        font-size: 3rem;
+      }
+
+      input[type='checkbox'] {
+        transform: scale(2);
+      }
+
+      .buttons {
+        width: 80%;
+        margin: 9 auto;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+
+      .buttons > button, .buttons > div {
+        display: block;
+        flex-grow: 1;
       }
 
       #text {
         width: 80%;
         box-shadow: 0.5rem 0.5rem 1rem #ccc;
+      }
+
+      .counters-container {
+        margin-top: 2rem;
+      }
+
+      .counters {
+        margin: 0 auto;
+        width: 80%;
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .counters div {
+        text-align: center;
+        flex-grow: 1;
+      }
+
+      .outputs {
+        font-size: 3rem;
       }
 
       #select-indicator {
@@ -61,39 +101,50 @@
       Live sentence, word, paragraph, and character counter
     </h2>
     <p>
-      This utility is handy for quick work counts. Enter text or paste it into
+      This utility is handy for quick word counts. Enter text or paste it into
       the box below. The counters below the box will automatically update as you
       type.
     </p>
 
     <div class="container">
+      <div class="buttons">
+        <button onclick="countIt(false)" id="count">Count</button
+        ><button id="copy">Copy</button>
+        <div class="check-container">
+        <input
+          type="checkbox"
+          name="auto-count"
+          id="auto-count"
+          checked
+        /><label for="auto-count">Auto count</label>
+        </div>
+      </div>
       <textarea id="text" rows="15" autofocus></textarea>
     </div>
-    <div>
-      <button onclick="countIt(false)" id="count">Count</button
-      ><button id="copy">Copy</button>
-      <input type="checkbox" name="auto-count" id="auto-count" checked /><label
-        for="auto-count"
-        >Auto count</label
-      >
-      <button id="notes">Notes</button>
-
-      <div class="flex-container">
-        <div>Sentences</div>
-        <div>Words</div>
-        <div>Characters</div>
-        <div>Paragraphs</div>
-      </div>
-      <div class="flex-container" id="output">
-        <div id="sentence-count" class="outputs">0</div>
-        <div id="word-count" class="outputs">0</div>
-        <div id="character-count" class="outputs">0</div>
-        <div id="paragraph-count" class="outputs">0</div>
+    <div class="counters-container">
+      <div class="counters">
+        <div>
+          <div id="sentence-count" class="outputs">0</div>
+          Sentences
+        </div>
+        <div>
+          <div id="word-count" class="outputs">0</div>
+          Words
+        </div>
+        <div>
+          <div id="character-count" class="outputs">0</div>
+          Characters
+        </div>
+        <div>
+          <div id="paragraph-count" class="outputs">0</div>
+          Paragraphs
+        </div>
       </div>
       <div id="select-indicator">&mdash; of selection &mdash;</div>
     </div>
 
     <h2 class="subtitle">Notes and Limitations</h2>
+    <p>
     <ol>
       <li>
         The counter won't be accurate if a sentence contains acronyms or names
@@ -107,9 +158,10 @@
 
       <li>The character count includes spaces.</li>
     </ol>
+    </p>
 
     <script>
-      const version = 'v0.3';
+      const version = 'v0.5';
       const prev = { val: '', s: 0, w: 0, c: 0, p: 0 }; // previous value storage.
 
       let hiliteTs; // highlight timeout. Setting to this variable makes sure that only one highlight timeout is set at one time.
