@@ -1,202 +1,248 @@
 <html>
-    <head>
-        <title>CountIt</title>
-        
-        <style>
-            button, div, input, label {
-                font-size: 20px;
-                font-family: sans-serif;
-            }
+  <head>
+    <title>CountIt</title>
 
-            button {
-                height: 50px;
-                font-size: 20px;
-                margin-bottom: 5px;
+    <style>
+      button,
+      div,
+      input,
+      label {
+        font-size: 20px;
+        font-family: sans-serif;
+      }
 
-                cursor: pointer;
-            }
+      button {
+        height: 50px;
+        font-size: 20px;
+        margin-bottom: 5px;
 
-            #count {
-                width: 225px;
-            }
+        cursor: pointer;
+      }
 
-            #copy {
-                width: 150px;
-            }
+      #count {
+        width: 225px;
+      }
 
-            #text {
-                font-size: 150%;
-                width: 500px; 
-                height: 300px;
-            }
+      #copy {
+        width: 150px;
+      }
 
-            .flex-container {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
+      #text {
+        font-size: 150%;
+        width: 500px;
+        height: 300px;
+      }
 
-                justify-content: center;
+      .flex-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
 
-                width: 500px;
-            }
-            
-            .flex-container div {
-                width: 167px;
-                text-align: center;
-            }
+        justify-content: center;
 
-            #output * {
-                font-size: 50px;
-            }
+        width: 500px;
+      }
 
-            @keyframes selectAnim {
-                0% { color: #fff; }
-                50% { color: #00f; }
-                100% { color: #fff; }
-            }
+      .flex-container div {
+        width: 167px;
+        text-align: center;
+      }
 
-            .select-indicator {
-                animation: selectAnim 2s infinite;
-                width: 500px;
-                text-align: center;
-                font-style: italic;
-                display: none;
-            }
-        </style>
-    </head>
+      #output * {
+        font-size: 50px;
+      }
 
-    <body>
-        <textarea id="text" autofocus></textarea><br/>
-        
-        <button onclick="countIt(false)" id="count">Count</button><button id="copy">Copy</button>
-        <input type="checkbox" name="auto-count" id="auto-count" checked><label for="auto-count">Auto count</label>
-        
-        <div class="flex-container">
-            <div>Sentences</div>
-            <div>Words</div>
-            <div>Characters</div>
-        </div>
-        <div class="flex-container" id="output">
-            <div id="sentence-count" class="outputs">0</div>
-            <div id="word-count" class="outputs">0</div>
-            <div id="character-count" class="outputs">0</div>
-        </div>
-        <div class="select-indicator">&mdash; of selection &mdash;</div>
+      @keyframes selectAnim {
+        0% {
+          color: #fff;
+        }
+        50% {
+          color: #00f;
+        }
+        100% {
+          color: #fff;
+        }
+      }
 
-        <script>
-            var version = 'v0.2';
-            document.title = 'CountIt ' + version;
-            
-            // previous value storage.
-            var prev = { val: '', s: 0, w: 0, c: 0 };
-            
-            var hiliteTs;           // highlight timeout. Setting to this variable makes sure that only one highlight timeout is set at one time.
-            var autoCount = true;   // auto count. Automatically count on type / input.
-            
-            var $indicator = document.querySelector('.select-indicator');
-            
-            function countIt(isSelection) {
-                var sel = window.getSelection().toString();
-                $indicator.style.display = sel == ''? 'none' : 'block';
-                
-                var text = (isSelection && sel != '')? sel : document.getElementById('text').value;
-                
-                if (text === prev.val) return false;
+      #select-indicator {
+        animation: selectAnim 2s infinite;
+        width: 500px;
+        text-align: center;
+        font-style: italic;
+        display: none;
+      }
+    </style>
+  </head>
 
-                hiLite('sentence-count', false);
-                hiLite('word-count', false);
-                hiLite('character-count', false);
+  <body>
+    <textarea id="text" autofocus></textarea><br />
 
-                var sentArr = text.split('. ');
-                var sL = 0;
-                for (var i = 0; i < sentArr.length; i++) if (sentArr[i].trim().length > 0) sL++;                
-                
-                var wordArr = text.split(' ');
-                var wL = 0;
-                for (var i = 0; i < wordArr.length; i++) if (wordArr[i].length > 0) wL++;
+    <button onclick="countIt(false)" id="count">Count</button
+    ><button id="copy">Copy</button>
+    <input type="checkbox" name="auto-count" id="auto-count" checked /><label
+      for="auto-count"
+      >Auto count</label
+    >
 
-                var cL = text.length;
+    <div class="flex-container">
+      <div>Sentences</div>
+      <div>Words</div>
+      <div>Characters</div>
+    </div>
+    <div class="flex-container" id="output">
+      <div id="sentence-count" class="outputs">0</div>
+      <div id="word-count" class="outputs">0</div>
+      <div id="character-count" class="outputs">0</div>
+    </div>
+    <div id="select-indicator">&mdash; of selection &mdash;</div>
 
-                /*
-                TODO paragraph counter
+    <script>
+      const version = 'v0.3';
+      const prev = { val: '', s: 0, w: 0, c: 0 }; // previous value storage.
 
-                var paraArr = text.split('.');
-                var pL = 0;
-                for (var i = 0; i < paraArr.length; i++) if (paraArr[i].trim().length > 0) pL++;
+      let hiliteTs; // highlight timeout. Setting to this variable makes sure that only one highlight timeout is set at one time.
+      let autoCount = true; // auto count. Automatically count on type / input.
 
-                document.getElementById('paragraph-count').innerHTML = pL;
-                */
+      const $elements = {
+        s: document.getElementById('sentence-count'),
+        w: document.getElementById('word-count'),
+        c: document.getElementById('character-count'),
+      };
+      const $indicator = document.getElementById('select-indicator');
 
-                // populate values.
-                if (sL != prev.s) { document.getElementById('sentence-count') .innerHTML = sL; hiLite('sentence-count', true);  }
-                if (wL != prev.w) { document.getElementById('word-count')     .innerHTML = wL; hiLite('word-count', true);      }
-                if (cL != prev.c) { document.getElementById('character-count').innerHTML = cL; hiLite('character-count', true); }
+      // counts: Return sentence, word, and character counts.
+      // @text input text
+      function counts(text) {
+        if (text === prev.val) return prev;
 
-                // populate title
-                document.title = 'CountIt ' + version + ': s=' + sL + ', w=' + wL + ', c=' + cL;
+        // sC: sentence count
+        // Doesn't count sentences that are improperly
+        // spaced (i.e. "This is a sentence.This is another sentence.")
+        const sentences = text.trim().split(/\.\s\n?/);
 
-                // populate values into next previous values comparison.
-                prev.val = text;
-                prev.s = sL;
-                prev.w = wL;
-                prev.c = cL;
+        // wC: word count
+        const words = text.trim().split(/[\s\n]+/);
 
-                // unhighlight after timer
-                hiliteTs = setTimeout(function() {
-                    hiLite('sentence-count', false);
-                    hiLite('word-count', false);
-                    hiLite('character-count', false);
+        return {
+          val: text,
+          s: sentences.length,
+          w: words.length,
+          c: text.length,
+        };
+      }
 
-                }, 1000);
-            }
+      // countIt: runner function.
+      // calls counts() and updates DOM.
+      // @isSelection: is the text part of a selection or not.
+      function countIt(isSelection) {
+        const sel = window.getSelection().toString();
+        $indicator.style.display = sel == '' ? 'none' : 'block';
 
-            // highlight numbers.
-            function hiLite(elId, switchOn) {
-                var el = document.getElementById(elId);
+        const text =
+          isSelection && sel != ''
+            ? sel
+            : document.getElementById('text').value;
 
-                el.style.color = switchOn? 'red' : '';
-                el.style.backgroundColor = switchOn? 'lime' : '';
-            }
-            
-            // countIt is called on input (change of #text value) if auto count is true
-            document.querySelector('#text').oninput = function(e) {
-                if (autoCount) countIt(false);
-            };
-            
-            // selection handlers
-            document.querySelector('#text').onselect = function(e) {
-                countIt(true);
-            }
-            
-            // selection handler for iOS
-            document.querySelector('#text').onselectionchange = function() {
-                countIt(true);
-            }
-            
-            document.querySelector('#text').onkeyup = function(e) {
-                if (autoCount) countIt(true);
-            }
-            
-            document.querySelector('#text').onclick = function(e) {
-                countIt(false);
-            }            
-            
-            // copy text from #text
-            // copies text 
-            document.querySelector('#copy').onclick = function() {
-                if (window.getSelection().toString() == '') document.querySelector('#text').select();
-                document.execCommand('copy');
-            }
+        if (text === prev.val) {
+          return false;
+        }
 
-            document.querySelector('#auto-count').onclick = function() {
-                autoCount = this.checked;
-            }
-            
-            // housekeeping function
-            // this is needed because there is no "unselect" event.
-            setInterval(function() {
-                if (window.getSelection().toString() == '' && $indicator.style.display == 'block') $indicator.style.display = 'none';
-            }, 500);
-        </script>
-    </body>
+        const cts = counts(text);
+
+        // populate values.
+        if (cts.s === prev.s) {
+          hiLite('s', false);
+        } else {
+          $elements.s.textContent = cts.s;
+          hiLite('s', true);
+        }
+
+        if (cts.w === prev.w) {
+          hiLite('w', false);
+        } else {
+          $elements.w.textContent = cts.w;
+          hiLite('w', true);
+        }
+
+        if (cts.c === prev.c) {
+          hiLite('c', false);
+        } else {
+          $elements.c.textContent = cts.c;
+          hiLite('c', true);
+        }
+
+        // populate title.
+        document.title = `CountIt: s=${cts.s}, w=${cts.w}, c=${cts.c}`;
+
+        // populate values into next previous values comparison.
+        prev.val = text;
+        prev.s = cts.s;
+        prev.w = cts.w;
+        prev.c = cts.c;
+
+        // unhighlight after timer.
+        hiliteTs = setTimeout(() => {
+          hiLite('s', false);
+          hiLite('w', false);
+          hiLite('c', false);
+        }, 1000);
+      }
+
+      // highlight numbers.
+      function hiLite(el, switchOn) {
+        $elements[el].style.color = switchOn ? 'red' : '';
+        $elements[el].style.backgroundColor = switchOn ? 'lime' : '';
+      }
+
+      const $textInput = document.getElementById('text');
+      // countIt is called on input (change of #text value) if auto count is true
+      $textInput.addEventListener('input', () => {
+        if (autoCount) {
+          countIt(false);
+        }
+      });
+
+      // selection handlers
+      $textInput.addEventListener('select', () => void countIt(true));
+
+      // selection handler for iOS
+      $textInput.addEventListener(
+        'selectionchange',
+        (event) => void countIt(true)
+      );
+
+      $textInput.addEventListener('keyup', () => {
+        if (autoCount) {
+          countIt(true);
+        }
+      });
+
+      $textInput.addEventListener('click', () => void countIt(false));
+
+      // copies text
+      document.getElementById('copy').addEventListener('click', () => {
+        if (window.getSelection().toString() == '') {
+          $textInput.select();
+        }
+        document.execCommand('copy');
+      });
+
+      document
+        .getElementById('auto-count')
+        .addEventListener('click', function () {
+          autoCount = this.checked;
+        });
+
+      // housekeeping function
+      // this is needed because there is no "unselect" event.
+      setInterval(() => {
+        if (
+          window.getSelection().toString() == '' &&
+          $indicator.style.display == 'block'
+        ) {
+          $indicator.style.display = 'none';
+        }
+      }, 500);
+    </script>
+  </body>
 </html>
