@@ -88,17 +88,19 @@
       <div>Sentences</div>
       <div>Words</div>
       <div>Characters</div>
+      <div>Paragraphs</div>
     </div>
     <div class="flex-container" id="output">
       <div id="sentence-count" class="outputs">0</div>
       <div id="word-count" class="outputs">0</div>
       <div id="character-count" class="outputs">0</div>
+      <div id="paragraph-count" class="outputs">0</div>
     </div>
     <div id="select-indicator">&mdash; of selection &mdash;</div>
 
     <script>
       const version = 'v0.3';
-      const prev = { val: '', s: 0, w: 0, c: 0 }; // previous value storage.
+      const prev = { val: '', s: 0, w: 0, c: 0, p: 0 }; // previous value storage.
 
       let hiliteTs; // highlight timeout. Setting to this variable makes sure that only one highlight timeout is set at one time.
       let autoCount = true; // auto count. Automatically count on type / input.
@@ -107,6 +109,7 @@
         s: document.getElementById('sentence-count'),
         w: document.getElementById('word-count'),
         c: document.getElementById('character-count'),
+        p: document.getElementById('paragraph-count'),
       };
       const $indicator = document.getElementById('select-indicator');
 
@@ -114,23 +117,28 @@
       // @text input text
       function counts(text) {
         if (text === prev.val) return prev;
+        const trimmed = text.trim();
 
         // sentences: sentence count
         // Doesn't count sentences that are improperly
         // spaced (i.e. "This is a sentence.This is another sentence.")
-        const sentences = text.trim().split(/\.\s\n?/);
+        const sentences = trimmed.split(/\.\s\n?/);
 
         // words: word count
-        const words = text.trim().split(/[\s\n]+/);
+        const words = trimmed.split(/[\s\n]+/);
 
-        // characters: character count (matches MS Word char count)
+        // characters: character count (matches MS Word char count with spaces)
         const characters = text.replace(/\n/g, '');
+
+        // paragraphs: number of paragraphs (blocks of text).
+        const paragraphs = trimmed.split(/\n+/);
 
         return {
           val: text,
           s: sentences.length,
           w: words.length,
           c: characters.length,
+          p: paragraphs.length,
         };
       }
 
@@ -174,20 +182,29 @@
           hiLite('c', true);
         }
 
+        if (cts.p === prev.p) {
+          hiLite('p', false);
+        } else {
+          $elements.p.textContent = cts.p;
+          hiLite('p', true);
+        }
+
         // populate title.
-        document.title = `CountIt: s=${cts.s}, w=${cts.w}, c=${cts.c}`;
+        document.title = `CountIt: s=${cts.s}, w=${cts.w}, c=${cts.c}, p=${cts.p}`;
 
         // populate values into next previous values comparison.
         prev.val = text;
         prev.s = cts.s;
         prev.w = cts.w;
         prev.c = cts.c;
+        prev.p = cts.p;
 
         // unhighlight after timer.
         hiliteTs = setTimeout(() => {
           hiLite('s', false);
           hiLite('w', false);
           hiLite('c', false);
+          hiLite('p', false);
         }, 1000);
       }
 
