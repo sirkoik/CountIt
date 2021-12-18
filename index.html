@@ -78,6 +78,7 @@
         width: 80%;
         display: flex;
         justify-content: space-evenly;
+        align-items: flex-end;
       }
 
       .counters div {
@@ -95,6 +96,10 @@
         text-align: center;
         font-style: italic;
         display: none;
+      }
+
+      ol li {
+        margin: 1rem;
       }
     </style>
   </head>
@@ -130,7 +135,7 @@
       <div class="counters">
         <div>
           <div id="sentence-count" class="outputs">0</div>
-          Sentences
+          Sentences<sup>1</sup>
         </div>
         <div>
           <div id="word-count" class="outputs">0</div>
@@ -152,9 +157,9 @@
     <p>
     <ol>
       <li>
-        The counter won't be accurate if a sentence contains acronyms or names
+        The <b>Sentences</b> counter won't be accurate if a sentence contains acronyms or names
         with periods. For instance, "J. D. Johnson" will count as three
-        sentences. "J.D. Johnson" will count as two.
+        sentences. "J.D. Johnson" will count as two. Other counters are unaffected.
       </li>
 
       <li>
@@ -166,8 +171,7 @@
     </p>
 
     <p style="text-align: center">
-      By <a href="https://github.com/sirkoik">@sirkoik</a><br/>
-      <a href="/">Home</a>
+      By <a href="https://github.com/sirkoik">@sirkoik</a> &bull; <a href="/">Home</a>
     </p>
 
     <script>
