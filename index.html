@@ -68,9 +68,18 @@
         box-shadow: 0.5rem 0.5rem 1rem #ccc;
       }
 
+      .counters-widgets {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        margin-bottom: 7rem;
+      }
+
       .counters-container {
         margin-top: 2rem;
-        margin-bottom: 7rem;
+        margin-bottom: 1rem;
+        width: 100%;
       }
 
       .counters {
@@ -90,12 +99,16 @@
         font-size: 3rem;
       }
 
+      .indicator-has-changed {
+        color: lime;
+      }
+
       #select-indicator {
         animation: selectAnim 2s infinite;
         width: 500px;
         text-align: center;
         font-style: italic;
-        display: none;
+        visibility: hidden;
       }
 
       ol li {
@@ -131,23 +144,25 @@
       <textarea id="text" autofocus></textarea>
     </div>
 
-    <div class="counters-container">
-      <div class="counters">
-        <div>
-          <div id="sentence-count" class="outputs">0</div>
-          Sentences<sup>1</sup>
-        </div>
-        <div>
-          <div id="word-count" class="outputs">0</div>
-          Words
-        </div>
-        <div>
-          <div id="character-count" class="outputs">0</div>
-          Characters
-        </div>
-        <div>
-          <div id="paragraph-count" class="outputs">0</div>
-          Paragraphs
+    <div class="counters-widgets">
+      <div class="counters-container">
+        <div class="counters">
+          <div>
+            <div id="sentence-count" class="outputs">0</div>
+            Sentences
+          </div>
+          <div>
+            <div id="word-count" class="outputs">0</div>
+            Words
+          </div>
+          <div>
+            <div id="character-count" class="outputs">0</div>
+            Characters
+          </div>
+          <div>
+            <div id="paragraph-count" class="outputs">0</div>
+            Paragraphs
+          </div>
         </div>
       </div>
       <div id="select-indicator">&mdash; of selection &mdash;</div>
@@ -162,16 +177,18 @@
         sentences. "J.D. Johnson" will count as two. Other counters are unaffected.
       </li>
 
+      <li>Any text that is not separated by a space is counted as a word.</li>
+
+      <li>Character count includes spaces.</li>
+
       <li>
         A paragraph is a block of text. Paragraphs are separated by line breaks.
       </li>
-
-      <li>The character count includes spaces.</li>
     </ol>
     </p>
 
     <p style="text-align: center">
-      By <a href="https://github.com/sirkoik">@sirkoik</a> &bull; <a href="/">Home</a>
+      By <a href="https://github.com/sirkoik">@sirkoik</a> &bull; <a href="https://github.com/sirkoik/CountIt">GitHub</a> &bull; <a href="/">Home</a>
     </p>
 
     <script>
@@ -234,7 +251,7 @@
       // @isSelection: is the text part of a selection or not.
       function countIt(isSelection) {
         const sel = window.getSelection().toString();
-        $indicator.style.display = sel == '' ? 'none' : 'block';
+        $indicator.style.visibility = sel == '' ? 'hidden' : 'visible';
 
         const text =
           isSelection && sel != ''
@@ -297,8 +314,11 @@
 
       // highlight numbers.
       function hiLite(el, switchOn) {
-        $elements[el].style.color = switchOn ? 'red' : '';
-        $elements[el].style.backgroundColor = switchOn ? 'lime' : '';
+        if (switchOn) {
+          $elements[el].classList.add('indicator-has-changed');
+        } else {
+          $elements[el].classList.remove('indicator-has-changed');
+        }
       }
 
       const $textInput = document.getElementById('text');
@@ -345,9 +365,9 @@
       setInterval(() => {
         if (
           window.getSelection().toString() == '' &&
-          $indicator.style.display == 'block'
+          $indicator.style.visibility == 'visible'
         ) {
-          $indicator.style.display = 'none';
+          $indicator.style.visibility = 'hidden';
         }
       }, 500);
     </script>
